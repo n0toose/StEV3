@@ -51,34 +51,10 @@ while true
     dpad_horizontal = axis(joy, 8);
     dpad_vertical = axis(joy, 7);
 
-%     if d_pad_direction == -1
-%         % Not pressed.
-%     elseif d_pad_direction == 0
-%         % Top
-%     elseif d_pad_direction == 45
-%         % Top right
-%     elseif d_pad_direction == 90
-%         % Right
-%     elseif d_pad_direction == 135
-%         % Bottom right
-%     elseif d_pad_direction == 180
-%         % Bottom
-%     elseif d_pad_direction == 225
-%         % Bottom left
-%     elseif d_pad_direction == 270
-%         % Left
-%     elseif d_pad_direction == 315
-%         % Top left
-%     end
-
     plot(left_horizontal_stick, left_vertical_stick, 'or')
     plot(right_horizontal_stick, right_vertical_stick, 'ob')
     pause(0.01);
 
-    disp(right_horizontal_stick)
-    % fprintf("%d %d %d %d\n", a_pressed, b_pressed, x_pressed, y_pressed);
-
-    disp(start_button_pressed)
     if start_button_pressed == 1
         close all;
         break;
