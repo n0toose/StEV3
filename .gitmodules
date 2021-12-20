@@ -1,0 +1,3 @@
+[submodule "ev3-toolbox-matlab"]
+	path = ev3-toolbox-matlab
+	url = https://git.rwth-aachen.de/mindstorms/ev3-toolbox-matlab.git
