@@ -13,9 +13,6 @@ joy = vrjoystick(1);
 % POVs: 0
 % Forces: 0
 
-% Keep in mind that the shoulders are
-% not supported properly.
-
 addpath('ev3-toolbox-matlab/source/')
 
 figure
@@ -112,7 +109,7 @@ while true
                 power = -100;
                 b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Brake')
                 b.motorA.start()
-            elseif left_shoulder_button == 1 && not b_running
+            elseif left_shoulder_button == 1 && not(b_running)
                 startedPrevious = true;
                 power = -100;
                 b.motorB.setProperties('debug', debug, 'power', power, 'brakeMode', 'Brake')
