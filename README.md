@@ -1,4 +1,4 @@
-# Stev3, the MATLAB-powered Lego kart!
+# StEV3, the MATLAB-powered Lego kart!
 
 This project was built in December, 2021, as part of an
 experimental attempt to control the motors of a robot made
@@ -23,3 +23,8 @@ instead of an infinite loop, but hey, it works.
 
 - [RWTH - Mindstorms NXT Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/18646-rwth-mindstorms-nxt-toolbox)
 - [Simulink 3D Animation](https://www.mathworks.com/products/3d-animation.html) (alternatively, [HebiRobotics](https://www.mathworks.com/matlabcentral/fileexchange/61276-hebirobotics-hebijoystick))
+
+## Credits
+
+- `Patrick Wendt`
+- `fiftyseventh`
