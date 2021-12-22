@@ -1,9 +1,6 @@
-function main_loop
-global joy
+function main
 
 addpath('ev3-toolbox-matlab/source/')
-
-joy = vrjoystick(1);
 
 % ----------------------------------
 % Xbox One Controller's Capabilities
@@ -12,8 +9,6 @@ joy = vrjoystick(1);
 % Buttons: 11
 % POVs: 0
 % Forces: 0
-
-addpath('ev3-toolbox-matlab/source/')
 
 figure
 joy = vrjoystick(1);
@@ -27,6 +22,10 @@ b.connect('usb', 'beep', 'on');
 debug = 'off'
 startedPrevious = false;
 
+% Makes sure that the motors
+% are not moving thanks to some
+% previous instance of the program
+% being exited in a non-graceful manner.
 b.motorA.stop()
 b.motorB.stop()
 b.motorC.stop()
@@ -127,7 +126,8 @@ while true
         b.motorB.stop()
         b.motorC.stop()
         b.motorD.stop()
-        end
+    end
+        if x_pressed
 
         if b_pressed
             b.playTone(100, 5000, 5)
