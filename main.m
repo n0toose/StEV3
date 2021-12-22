@@ -137,7 +137,7 @@ while true
         
         if (x_pressed && y_pressed) || toggle_distance_beep
             if b.sensor2.value < 20
-                b.playTone(100, (b.sensor2.value * 200), 250)
+                b.playTone(100, (20 * 200 - b.sensor2.value * 200), 250)
             end
         end
 
