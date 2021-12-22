@@ -20,7 +20,7 @@ xlim([-1 1])
 ylim([-1 1])
 
 b = EV3();
-b.connect('bt', 'serPort', '/dev/rfcomm0', 'beep', 'on');
+b.connect('bt', 'serPort', '/dev/rfcomm1', 'beep', 'on');
 debug = 'off'
 startedPrevious = false;
 
@@ -33,11 +33,15 @@ b.motorB.stop()
 b.motorC.stop()
 b.motorD.stop()
 
+% Set up distance sensor
+b.sensor2.mode = DeviceMode.UltraSonic.DistCM;
+toggle_distance_beep = 0;
+
 while true
     a_pressed = button(joy, 1);
     b_pressed = button(joy, 2);
-    x_pressed = button(joy, 3);
-    y_pressed = button(joy, 4);
+    x_pressed = button(joy, 4);
+    y_pressed = button(joy, 5);
 
     left_stick_pressed = button(joy, 14);
     right_stick_pressed = button(joy, 15);
@@ -126,8 +130,15 @@ while true
         end
 
         % Distance sensor
-        if b.sensor < 20
-            b.playTone(100, 4000, 250)
+        if left_stick_pressed
+            toggle_distance_beep = not(toggle_distance_beep)
+            fprintf("Distance Beep: %d", toggle_distance_beep)
+        end
+        
+        if (x_pressed && y_pressed) || toggle_distance_beep
+            if b.sensor2.value < 20
+                b.playTone(100, (b.sensor2.value * 200), 250)
+            end
         end
 
         % if b_pressed
