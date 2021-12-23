@@ -69,17 +69,17 @@ while true
     if left_shoulder > -1 || right_shoulder > -1 ...
         || right_shoulder_button == 1 || left_shoulder_button == 1 ...
         || dpad_horizontal ~= 0 || dpad_vertical ~= 0
-        if startedPrevious == false;
+        if startedPrevious == false
             if dpad_horizontal ~= 0 % && not(b.motorD.isRunning)
                 startedPrevious = true;
-                power = dpad_horizontal * 50;
+                power = dpad_horizontal * 30;
                 b.motorD.setProperties('debug', debug, 'power', power, 'brakeMode', 'Brake')
                 b.motorD.start()
             end
 
             if dpad_vertical ~= 0 % && not(a.motorA.isRunning) && not(a.motorB.isRunning)
                 startedPrevious = true;
-                power = dpad_vertical * 50;
+                power = dpad_vertical * 30;
                 b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Brake')
                 b.motorA.syncedStart(b.motorB)
             end
@@ -120,13 +120,25 @@ while true
         b.motorC.stop()
         b.motorD.stop()
     end
+        % Beep
+        if a_pressed
+            b.beep();
+        end
+
+        % Surprising! honk
         if b_pressed
+            b.playTone(50, 800, 5)
+        end
+
+        % Song
+        if y_pressed
             song = songPlayer();
             song.gotye_1(b, joy)
         end
 
-        if a_pressed
-            b.beep();
+        % Annoying honk
+        if right_stick_pressed
+            b.playTone(100, 3000, 250)
         end
 
         % Distance sensor
@@ -135,9 +147,9 @@ while true
             fprintf("Distance Beep: %d", toggle_distance_beep)
         end
         
-        if (x_pressed && y_pressed) || toggle_distance_beep
+        if (x_pressed) || toggle_distance_beep
             if b.sensor2.value < 20
-                b.playTone(100, (20 * 200 - b.sensor2.value * 200), 250)
+                b.playTone(20, (20 * 200 - b.sensor2.value * 200), 250)
             end
         end
 
@@ -145,9 +157,7 @@ while true
         %     b.playTone(100, 5000, 5)
         % end
 
-        if right_stick_pressed
-            b.playTone(100, 3000, 250)
-        end
+
 
         % plot(left_horizontal_stick, left_vertical_stick, 'or')
         % plot(right_horizontal_stick, right_vertical_stick, 'ob')
