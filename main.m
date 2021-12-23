@@ -87,13 +87,13 @@ while true
             if right_shoulder_button == 1 && not(b.motorA.isRunning) && not(b.motorC.isRunning)
                 startedPrevious = true;
                 power = -100;
-                b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Coast')
+                b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Brake')
                 b.motorA.start()
                 % b.motorA.syncedStart(b.motorD)
             elseif left_shoulder_button == 1 && not(b.motorB.isRunning) && not(b.motorC.isRunning)
                 startedPrevious = true;
                 power = -100;
-                b.motorB.setProperties('debug', debug, 'power', power, 'brakeMode', 'Coast')
+                b.motorB.setProperties('debug', debug, 'power', power, 'brakeMode', 'Brake')
                 b.motorB.start()
                 % b.motorB.syncedStart(b.motorD)
             end
@@ -102,13 +102,13 @@ while true
                 startedPrevious = true;
                 % power = abs(left_shoulder + 1) * 50
                 power = 100;
-                b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Coast')
+                b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Brake')
                 b.motorA.syncedStart(b.motorB)
             elseif right_shoulder > -1 && not(b.motorA.isRunning) && not(b.motorB.isRunning)
                 startedPrevious = true;
                 % power = abs(right_shoulder + 1) * -50
                 power = -100;
-                b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Coast')
+                b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Brake')
                 b.motorA.syncedStart(b.motorB)
             end
         end
@@ -148,8 +148,8 @@ while true
         end
         
         if (x_pressed) || toggle_distance_beep
-            if b.sensor2.value < 20
-                b.playTone(20, (20 * 200 - b.sensor2.value * 200), 250)
+            if b.sensor2.value < 30
+                b.playTone(50, (20 * 200 - b.sensor2.value * 200), 120)
             end
         end
 
