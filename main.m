@@ -79,7 +79,7 @@ while true
 
             if dpad_vertical ~= 0 % && not(a.motorA.isRunning) && not(a.motorB.isRunning)
                 startedPrevious = true;
-                power = dpad_vertical * 30;
+                power = dpad_vertical * 70;
                 b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Brake')
                 b.motorA.syncedStart(b.motorB)
             end
@@ -102,13 +102,13 @@ while true
                 startedPrevious = true;
                 % power = abs(left_shoulder + 1) * 50
                 power = 100;
-                b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Brake')
+                b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Coast')
                 b.motorA.syncedStart(b.motorB)
             elseif right_shoulder > -1 && not(b.motorA.isRunning) && not(b.motorB.isRunning)
                 startedPrevious = true;
                 % power = abs(right_shoulder + 1) * -50
                 power = -100;
-                b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Brake')
+                b.motorA.setProperties('debug', debug, 'power', power, 'brakeMode', 'Coast')
                 b.motorA.syncedStart(b.motorB)
             end
         end
@@ -159,8 +159,8 @@ while true
 
 
 
-        % plot(left_horizontal_stick, left_vertical_stick, 'or')
-        % plot(right_horizontal_stick, right_vertical_stick, 'ob')
+        % plot(dpad_horizontal, dpad_vertical, 'or')
+        % plot(left_shoulder, right_shoulder, 'ob')
         pause(0.01);
 
         if start_button_pressed == 1
