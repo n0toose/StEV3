@@ -34,12 +34,7 @@ b = EV3();
 b.connect('bt', 'serPort', '/dev/rfcomm1', 'beep', 'on');
 % b.connect('usb', 'beep', 'on');
 
-%% Distance Sensor Initialization
-% Can be toggled
-% using the left stick button later. Off by default,
-% because it is too annoying.
-b.sensor2.mode = DeviceMode.UltraSonic.DistCM;
-toggle_distance_beep = 0;
+
 
 %% Internal Variable Initialization
 % `waitTime` prevents MATLAB from getting overwhelmed over more commands
@@ -48,6 +43,13 @@ waitTime = 0.01;
 debugMode = 'off';
 previouslyStarted = false;
 
+% Distance Sensor Initialization: Can be toggled
+% using the left stick button later. Off by default,
+% because it is too annoying.
+b.sensor2.mode = DeviceMode.UltraSonic.DistCM;
+distanceBeepToggle = 0;
+
+%% Stop motors
 % Makes sure that the motors are not moving thanks to some
 % previous instance of the program being exited in a non-graceful manner.
 b.motorA.stop()
@@ -57,20 +59,20 @@ b.motorD.stop()
 
 while true
     %% Buttons
-    a_pressed = button(joy, 1);
-    b_pressed = button(joy, 2);
-    x_pressed = button(joy, 4);
-    y_pressed = button(joy, 5);
+    buttonA = button(joy, 1);
+    buttonB = button(joy, 2);
+    buttonX = button(joy, 4);
+    buttonY = button(joy, 5);
 
-    select_button_pressed = button(joy, 11);
-    start_button_pressed = button(joy, 12);
-    home_button_pressed = button(joy, 10);
+    buttonSelect = button(joy, 11);
+    buttonStart = button(joy, 12);
+    buttonHome = button(joy, 10);
 
-    left_button_pressed = button(joy, 7);
-    right_button_pressed = button(joy, 8);
+    buttonStickLeft = button(joy, 14);
+    buttonStickRight = button(joy, 15);
 
-    left_stick_pressed = button(joy, 14);
-    right_stick_pressed = button(joy, 15);
+    buttonLeftShoulder = button(joy, 7);
+    buttonRightShoulder = button(joy, 8);
 
     %% Axes
     % ------
@@ -82,10 +84,10 @@ while true
     %
     % Minimum value: -1, Maximum value: 1, Value when idle: 0
 
-    left_horizontal_stick = axis(joy, 1);
-    left_vertical_stick = -axis(joy, 2);
-    right_horizontal_stick = axis(joy, 3);
-    right_vertical_stick = -axis(joy, 4);
+    leftHorizontalStick = axis(joy, 1);
+    leftVerticalStick = -axis(joy, 2);
+    rightHorizontalStick = axis(joy, 3);
+    rightVerticalStick = -axis(joy, 4);
 
     % D-pad
     % -----
@@ -109,13 +111,11 @@ while true
     %
     % Minimum value: -1, Maximum value: 1, Value when idle: -1
 
-    left_shoulder = axis(joy, 6);
-    left_shoulder_button = button(joy, 7);
-    right_shoulder = axis(joy, 5);
-    right_shoulder_button = button(joy, 8);
+    leftShoulder = axis(joy, 6);
+    rightShoulder = axis(joy, 5);
 
-    if left_shoulder > -1 || right_shoulder > -1 ...
-        || right_shoulder_button == 1 || left_shoulder_button == 1 ...
+    if leftShoulder > -1 || rightShoulder > -1 ...
+        || buttonRightShoulder == 1 || buttonLeftShoulder == 1 ...
         || dpad_horizontal ~= 0 || dpad_vertical ~= 0
         % previouslyStarted prevents conflicts between different controls
         % that utilize the same functions. For example, hitting the right
@@ -143,12 +143,12 @@ while true
             % enabling only one of the back motors. The turns can be
             % improved if the front wheels are steered towards the correct
             % direction.
-            if right_shoulder_button == 1 && not(b.motorA.isRunning) && not(b.motorC.isRunning)
+            if buttonRightShoulder == 1 && not(b.motorA.isRunning) && not(b.motorC.isRunning)
                 previouslyStarted = true;
                 power = -100;
                 b.motorA.setProperties('debug', debugMode, 'power', power, 'brakeMode', 'Coast')
                 b.motorA.start()
-            elseif left_shoulder_button == 1 && not(b.motorB.isRunning) && not(b.motorC.isRunning)
+            elseif buttonLeftShoulder == 1 && not(b.motorB.isRunning) && not(b.motorC.isRunning)
                 previouslyStarted = true;
                 power = -100;
                 b.motorB.setProperties('debug', debugMode, 'power', power, 'brakeMode', 'Coast')
@@ -162,13 +162,13 @@ while true
             %
             % If you'd like to insist on using it, use something like
             % `power = abs(right_shoulder + 1) * 100`
-            if left_shoulder > -1 && not(b.motorA.isRunning) && not(b.motorB.isRunning)
+            if leftShoulder > -1 && not(b.motorA.isRunning) && not(b.motorB.isRunning)
                 previouslyStarted = true;
                 % power = abs(left_shoulder + 1) * 100
                 power = 100;
                 b.motorA.setProperties('debug', debugMode, 'power', power, 'brakeMode', 'Coast')
                 b.motorA.syncedStart(b.motorB)
-            elseif right_shoulder > -1 && not(b.motorA.isRunning) && not(b.motorB.isRunning)
+            elseif rightShoulder > -1 && not(b.motorA.isRunning) && not(b.motorB.isRunning)
                 previouslyStarted = true;
                 % power = abs(right_shoulder + 1) * -100
                 power = -100;
@@ -186,34 +186,35 @@ while true
         b.motorD.stop()
     end
     
+    %% Sounds
     % Honk!
-    if a_pressed
+    if buttonA
         b.beep();
     end
 
     % Surprising! honk
-    if b_pressed
+    if buttonB
         b.playTone(50, 800, 5)
     end
 
     % Annoying honk
-    if right_stick_pressed
+    if buttonStickRight
         b.playTone(100, 3000, 250)
     end
 
     % Plays Gotye's "Somebody I Used To Know"
-    if x_pressed
+    if buttonX
         song = songPlayer();
         song.gotye_1(b, joy)
     end
 
     % Distance sensor
     if left_stick_pressed
-        toggle_distance_beep = not(toggle_distance_beep)
-        fprintf("Distance Beep: %d", toggle_distance_beep)
+        distanceBeepToggle = not(distanceBeepToggle)
+        fprintf("Distance Beep: %d", distanceBeepToggle)
     end
         
-    if (x_pressed && y_pressed) || toggle_distance_beep
+    if (buttonX && buttonY) || distanceBeepToggle
         % Max sensor value: 255. Let's not make it too annoying and cut
         % it down to 30.
         if b.sensor2.value < 30
@@ -226,10 +227,10 @@ while true
     % plot(left_horizontal_stick, left_vertical_stick, 'or')
     % plot(right_horizontal_stick, right_vertical_stick, 'ob')
     
-    pause(0.01);
+    pause(waitTime);
 
     % Quit loop, close all windows.
-    if start_button_pressed == 1
+    if buttonStart == 1
         close all;
         break;
     end
