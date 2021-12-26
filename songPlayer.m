@@ -14,7 +14,7 @@ methods
     function gotye_1 (obj, brickObj, joystick)
         % Insanely long vector containing notes and duration.
         % Example: vector = ['C', 1, 'E', 2, 'F', 3];
-        load('song.mat')
+        song = load('songs/songGotye1.mat');
         note_frequencies6 = containers.Map(obj.notes, obj.frequencies5);
         % BPM: 129 -> 1 note per 465 milliseconds.
         obj.ms_per_note = 465;
